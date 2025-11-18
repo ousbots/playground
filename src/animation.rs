@@ -174,8 +174,6 @@ fn trigger_animation<S: Component>(
 
         // Only update if state changed
         if *state != new_state {
-            *state = new_state;
-
             match new_state {
                 AnimationState::Idle => {
                     sprite.image = sprite_assets.standing_sprite.clone();
@@ -183,7 +181,11 @@ fn trigger_animation<S: Component>(
                         layout: sprite_assets.standing_layout.clone(),
                         index: 0,
                     });
-                    sprite.flip_x = false;
+                    if *state == AnimationState::WalkingLeft {
+                        sprite.flip_x = true;
+                    } else {
+                        sprite.flip_x = false;
+                    }
                 }
 
                 AnimationState::WalkingLeft => {
@@ -206,6 +208,8 @@ fn trigger_animation<S: Component>(
                     config.frame_timer = AnimationConfig::timer_from_fps(config.fps);
                 }
             }
+
+            *state = new_state;
         }
     }
 }
@@ -218,6 +222,8 @@ fn idle_timer(time: Res<Time>, mut query: Query<(&mut IdleTimer, &mut Sprite, &A
             if timer.0.just_finished() {
                 sprite.flip_x = !sprite.flip_x;
             }
+        } else {
+            timer.0.reset();
         }
     }
 }
