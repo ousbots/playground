@@ -28,6 +28,8 @@ struct SpriteAssets {
 #[derive(Component)]
 struct TheMan;
 
+const WALKING_SPEED: f32 = 120.;
+
 // Add the animation systems.
 pub fn add_systems(app: &mut App) {
     app.add_message::<AnimationTrigger>()
@@ -91,8 +93,8 @@ fn handle_movement(time: Res<Time>, mut sprite_position: Query<(&AnimationState,
     for (state, mut transform) in &mut sprite_position {
         match *state {
             AnimationState::Idle => (),
-            AnimationState::WalkingLeft => transform.translation.x -= 110. * time.delta_secs(),
-            AnimationState::WalkingRight => transform.translation.x += 110. * time.delta_secs(),
+            AnimationState::WalkingLeft => transform.translation.x -= WALKING_SPEED * time.delta_secs(),
+            AnimationState::WalkingRight => transform.translation.x += WALKING_SPEED * time.delta_secs(),
         }
     }
 }
