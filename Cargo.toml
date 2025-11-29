@@ -1,5 +1,5 @@
 [package]
-name = "playground"
+name = "greeting_card"
 version = "0.0.1"
 edition = "2024"
 
