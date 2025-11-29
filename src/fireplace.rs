@@ -36,8 +36,9 @@ pub fn add_systems(app: &mut App) {
         (
             handle_animations,
             handle_highlight,
-            reset_highlight,
+            handle_highlight_reset,
             handle_interaction,
+            handle_interaction_disable_highlight,
             handle_sound,
         ),
     );
@@ -73,11 +74,11 @@ fn handle_animations(time: Res<Time>, mut query: Query<(&mut AnimationConfig, &m
 // Apply a pulsing scale effect to highlighted fireplace.
 fn handle_highlight(
     time: Res<Time>,
-    query: Query<(&State, &mut Sprite, &mut Transform), (With<Fireplace>, With<Highlight>)>,
+    query: Query<(&State, &mut Sprite, &mut Transform, &Highlight, &Interactable), (With<Fireplace>, With<Highlight>)>,
 ) {
-    for (state, mut sprite, mut transform) in query {
-        if *state == State::Off {
-            let pulse = ((time.elapsed_secs() * 4.).sin() + 1.).mul_add(0.1, 1.);
+    for (state, mut sprite, mut transform, highlight, interactable) in query {
+        if *state == State::Off && interactable.first {
+            let pulse = (((time.elapsed_secs() - highlight.elapsed_offset) * 4.).sin() + 1.).mul_add(0.1, 1.);
             sprite.color = Color::srgba(pulse, pulse, pulse, 1.);
             transform.scale = Vec3::splat(SPRITE_SCALE * (((pulse - 1.) / 4.) + 1.));
         } else {
@@ -88,7 +89,7 @@ fn handle_highlight(
 }
 
 // Reset sprite color when highlight is removed.
-fn reset_highlight(
+fn handle_highlight_reset(
     mut removed: RemovedComponents<Highlight>,
     mut query: Query<(&mut Sprite, &mut Transform), With<Fireplace>>,
 ) {
@@ -126,6 +127,16 @@ fn handle_interaction(
                     sprite.texture_atlas = None;
                 }
             }
+        }
+    }
+}
+
+fn handle_interaction_disable_highlight(
+    mut query: Query<(&mut State, &mut Interactable), (With<Fireplace>, Changed<State>)>,
+) {
+    for (state, mut interactable) in &mut query {
+        if *state == State::Running {
+            interactable.first = false;
         }
     }
 }
@@ -178,9 +189,10 @@ fn init(
             .with_volume(Volume::Linear(RUNNING_VOLUME))
             .paused(),
         Interactable {
-            width: SPRITE_WIDTH * SPRITE_SCALE,
-            height: SPRITE_HEIGHT * SPRITE_SCALE,
             id: INTERACTABLE_ID.to_string(),
+            height: SPRITE_HEIGHT * SPRITE_SCALE,
+            width: SPRITE_WIDTH * SPRITE_SCALE,
+            first: true,
         },
     ));
 }

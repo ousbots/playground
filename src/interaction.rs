@@ -1,5 +1,11 @@
 use bevy::prelude::*;
 
+// Added to Interactable entities when they should be highlighted.
+#[derive(Component)]
+pub struct Highlight {
+    pub elapsed_offset: f32,
+}
+
 // Add to entities that can initiate interactions.
 #[derive(Component)]
 pub struct Interactor {
@@ -10,9 +16,10 @@ pub struct Interactor {
 // Add to entities that can be interacted with.
 #[derive(Component)]
 pub struct Interactable {
-    pub width: f32,
-    pub height: f32,
     pub id: String,
+    pub height: f32,
+    pub width: f32,
+    pub first: bool,
 }
 
 // Added to Interactor entities when they're in range of an Interactable.
@@ -20,10 +27,6 @@ pub struct Interactable {
 pub struct InRange {
     pub id: String,
 }
-
-// Added to Interactable entities when they should be highlighted.
-#[derive(Component)]
-pub struct Highlight {}
 
 // Message sent when an interaction is triggered.
 #[derive(Message)]
@@ -37,9 +40,30 @@ pub fn add_systems(app: &mut App) {
         .add_systems(Update, detect_overlaps);
 }
 
+// Simple AABB (Axis-Aligned Bounding Box) overlap detection.
+fn aabb_overlap(pos_1: Vec2, width_1: f32, height_1: f32, pos_2: Vec2, width_2: f32, height_2: f32) -> bool {
+    let half_width_1 = width_1 / 2.0;
+    let half_height_1 = height_1 / 2.0;
+    let half_width_2 = width_2 / 2.0;
+    let half_height_2 = height_2 / 2.0;
+
+    let left_1 = pos_1.x - half_width_1;
+    let right_1 = pos_1.x + half_width_1;
+    let top_1 = pos_1.y + half_height_1;
+    let bottom_1 = pos_1.y - half_height_1;
+
+    let left_2 = pos_2.x - half_width_2;
+    let right_2 = pos_2.x + half_width_2;
+    let top_2 = pos_2.y + half_height_2;
+    let bottom_2 = pos_2.y - half_height_2;
+
+    !(right_1 < left_2 || left_1 > right_2 || top_1 < bottom_2 || bottom_1 > top_2)
+}
+
 // Detects AABB overlaps between Interactors and Interactables.
 fn detect_overlaps(
     mut commands: Commands,
+    time: Res<Time>,
     interactors: Query<(Entity, &Transform, &Interactor)>,
     interactables: Query<(Entity, &Transform, &Interactable)>,
     in_range: Query<(Entity, &InRange)>,
@@ -78,7 +102,9 @@ fn detect_overlaps(
                     .entity(interactor_entity)
                     .insert(InRange { id: interactable_id });
                 if let Some(entity) = interactable_entity {
-                    commands.entity(entity).insert(Highlight {});
+                    commands.entity(entity).insert(Highlight {
+                        elapsed_offset: time.elapsed_secs(),
+                    });
                 }
             }
 
@@ -88,7 +114,9 @@ fn detect_overlaps(
                     .entity(interactor_entity)
                     .insert(InRange { id: interactable_id });
                 if let Some(entity) = interactable_entity {
-                    commands.entity(entity).insert(Highlight {});
+                    commands.entity(entity).insert(Highlight {
+                        elapsed_offset: time.elapsed_secs(),
+                    });
                 }
             }
 
@@ -100,24 +128,4 @@ fn detect_overlaps(
             _ => {}
         }
     }
-}
-
-// Simple AABB (Axis-Aligned Bounding Box) overlap detection.
-fn aabb_overlap(pos_1: Vec2, width_1: f32, height_1: f32, pos_2: Vec2, width_2: f32, height_2: f32) -> bool {
-    let half_width_1 = width_1 / 2.0;
-    let half_height_1 = height_1 / 2.0;
-    let half_width_2 = width_2 / 2.0;
-    let half_height_2 = height_2 / 2.0;
-
-    let left_1 = pos_1.x - half_width_1;
-    let right_1 = pos_1.x + half_width_1;
-    let top_1 = pos_1.y + half_height_1;
-    let bottom_1 = pos_1.y - half_height_1;
-
-    let left_2 = pos_2.x - half_width_2;
-    let right_2 = pos_2.x + half_width_2;
-    let top_2 = pos_2.y + half_height_2;
-    let bottom_2 = pos_2.y - half_height_2;
-
-    !(right_1 < left_2 || left_1 > right_2 || top_1 < bottom_2 || bottom_1 > top_2)
 }
