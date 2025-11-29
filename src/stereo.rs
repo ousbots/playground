@@ -176,7 +176,7 @@ fn init(
             texture_atlas: None,
             ..default()
         },
-        Transform::from_scale(Vec3::splat(SPRITE_SCALE)).with_translation(Vec3::new(260.0, 0.0, 1.0)),
+        Transform::from_scale(Vec3::splat(SPRITE_SCALE)).with_translation(Vec3::new(260.0, -170.0, 5.0)),
         Stereo,
         AnimationConfig::new(0, 4, 4),
         State::Off,

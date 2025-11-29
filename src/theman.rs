@@ -280,7 +280,7 @@ fn init(
             }),
             ..default()
         },
-        Transform::from_scale(Vec3::splat(4.0)).with_translation(Vec3::new(-200.0, -55.0, 10.0)),
+        Transform::from_scale(Vec3::splat(4.0)).with_translation(Vec3::new(-200.0, -225.0, 10.0)),
         TheMan,
         AnimationConfig::new(0, 8, 10),
         State::Idle,

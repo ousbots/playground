@@ -4,6 +4,7 @@ mod animation;
 mod app;
 mod background;
 mod fireplace;
+mod house;
 mod interaction;
 mod stereo;
 mod theman;

@@ -179,7 +179,7 @@ fn init(
             texture_atlas: None,
             ..default()
         },
-        Transform::from_scale(Vec3::splat(SPRITE_SCALE)).with_translation(Vec3::new(0.0, 0.0, 1.0)),
+        Transform::from_scale(Vec3::splat(SPRITE_SCALE)).with_translation(Vec3::new(0.0, -170.0, 5.0)),
         Fireplace,
         AnimationConfig::new(0, 4, 6),
         State::Off,
