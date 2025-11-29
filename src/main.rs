@@ -6,6 +6,7 @@ mod background;
 mod fireplace;
 mod house;
 mod interaction;
+mod snow;
 mod stereo;
 mod theman;
 

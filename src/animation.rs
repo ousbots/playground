@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use std::time::Duration;
 
-use crate::{background, fireplace, house, interaction, stereo, theman};
+use crate::{background, fireplace, house, interaction, snow, stereo, theman};
 
 #[derive(Component)]
 pub struct AnimationConfig {
@@ -33,6 +33,7 @@ pub fn add_systems(app: &mut App) {
     interaction::add_systems(app);
     house::add_systems(app);
     fireplace::add_systems(app);
+    snow::add_systems(app);
     stereo::add_systems(app);
     theman::add_systems(app);
 }
