@@ -166,9 +166,9 @@ fn init(
 ) {
     // Load the running sprite sheet.
     let sprite = SpriteAssets {
-        running_sprite: asset_server.load("fireplace_animation.png"),
+        running_sprite: asset_server.load("fireplace/fireplace_animation.png"),
         running_layout: texture_layouts.add(TextureAtlasLayout::from_grid(UVec2::splat(32), 5, 1, None, None)),
-        off_sprite: asset_server.load("fireplace.png"),
+        off_sprite: asset_server.load("fireplace/fireplace.png"),
     };
     commands.insert_resource(sprite.clone());
 
@@ -183,7 +183,7 @@ fn init(
         Fireplace,
         AnimationConfig::new(0, 4, 6),
         State::Off,
-        AudioPlayer::new(asset_server.load("fire.ogg")),
+        AudioPlayer::new(asset_server.load("fireplace/fire.ogg")),
         PlaybackSettings::LOOP
             .with_spatial(true)
             .with_volume(Volume::Linear(RUNNING_VOLUME))

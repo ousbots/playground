@@ -163,9 +163,9 @@ fn init(
 ) {
     // Load the running sprite sheet.
     let sprite = SpriteAssets {
-        running_sprite: asset_server.load("stereo_animation.png"),
+        running_sprite: asset_server.load("stereo/stereo_animation.png"),
         running_layout: texture_layouts.add(TextureAtlasLayout::from_grid(UVec2::splat(32), 5, 1, None, None)),
-        off_sprite: asset_server.load("stereo.png"),
+        off_sprite: asset_server.load("stereo/stereo.png"),
     };
     commands.insert_resource(sprite.clone());
 
@@ -180,7 +180,7 @@ fn init(
         Stereo,
         AnimationConfig::new(0, 4, 4),
         State::Off,
-        AudioPlayer::new(asset_server.load("merry_little_christmas.ogg")),
+        AudioPlayer::new(asset_server.load("stereo/merry_little_christmas.ogg")),
         PlaybackSettings::LOOP
             .with_spatial(true)
             .with_volume(Volume::Linear(RUNNING_VOLUME))

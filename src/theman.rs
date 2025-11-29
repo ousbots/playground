@@ -238,9 +238,9 @@ fn init(
 ) {
     // Load the sprite sheets.
     let sprites = SpriteAssets {
-        walking_sprite: asset_server.load("man_walking_animation.png"),
+        walking_sprite: asset_server.load("theman/theman_walking_animation.png"),
         walking_layout: texture_layouts.add(TextureAtlasLayout::from_grid(UVec2::splat(32), 9, 1, None, None)),
-        standing_sprite: asset_server.load("man_standing.png"),
+        standing_sprite: asset_server.load("theman/theman_standing.png"),
         standing_layout: texture_layouts.add(TextureAtlasLayout::from_grid(UVec2::splat(32), 1, 1, None, None)),
     };
     commands.insert_resource(sprites.clone());
@@ -250,12 +250,24 @@ fn init(
         left_steps: vec![],
         right_steps: vec![],
     };
-    audio.left_steps.push(asset_server.load("left_footstep_indoor_1.ogg"));
-    audio.left_steps.push(asset_server.load("left_footstep_indoor_2.ogg"));
-    audio.left_steps.push(asset_server.load("left_footstep_indoor_3.ogg"));
-    audio.right_steps.push(asset_server.load("right_footstep_indoor_1.ogg"));
-    audio.right_steps.push(asset_server.load("right_footstep_indoor_2.ogg"));
-    audio.right_steps.push(asset_server.load("right_footstep_indoor_3.ogg"));
+    audio
+        .left_steps
+        .push(asset_server.load("theman/left_footstep_indoor_1.ogg"));
+    audio
+        .left_steps
+        .push(asset_server.load("theman/left_footstep_indoor_2.ogg"));
+    audio
+        .left_steps
+        .push(asset_server.load("theman/left_footstep_indoor_3.ogg"));
+    audio
+        .right_steps
+        .push(asset_server.load("theman/right_footstep_indoor_1.ogg"));
+    audio
+        .right_steps
+        .push(asset_server.load("theman/right_footstep_indoor_2.ogg"));
+    audio
+        .right_steps
+        .push(asset_server.load("theman/right_footstep_indoor_3.ogg"));
     commands.insert_resource(audio);
 
     // Create the man starting in the idle state.
