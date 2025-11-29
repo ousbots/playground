@@ -5,6 +5,7 @@ mod app;
 mod background;
 mod fireplace;
 mod interaction;
+mod stereo;
 mod theman;
 
 fn main() {

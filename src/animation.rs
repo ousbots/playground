@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use std::time::Duration;
 
-use crate::{background, fireplace, interaction, theman};
+use crate::{background, fireplace, interaction, stereo, theman};
 
 #[derive(Component)]
 pub struct AnimationConfig {
@@ -22,7 +22,7 @@ impl AnimationConfig {
     }
 
     pub fn timer_from_fps(fps: u8) -> Timer {
-        Timer::new(Duration::from_secs_f32(1.0 / (fps as f32)), TimerMode::Once)
+        Timer::new(Duration::from_secs_f32(1.0 / f32::from(fps)), TimerMode::Once)
     }
 }
 
@@ -33,6 +33,7 @@ pub fn add_systems(app: &mut App) {
     fireplace::add_systems(app);
     interaction::add_systems(app);
     theman::add_systems(app);
+    stereo::add_systems(app);
 }
 
 // Animation initialization.
